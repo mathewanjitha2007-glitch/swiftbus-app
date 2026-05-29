@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+
+{% block title %}SwiftBus - Register{% endblock %}
+
+{% block content %}
+<div style="max-width: 480px; margin: 50px auto;">
+    <div style="background: white; padding: 40px; border-radius: 12px;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.1);">
+
+        <h2 style="text-align: center; color: #1a73e8; margin-bottom: 8px;">
+            Create Account 🚌
+        </h2>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">
+            Join SwiftBus today!
+        </p>
+
+        <form action="/register" method="POST" id="registerForm">
+            <div style="margin-bottom: 18px;">
+                <label style="font-size: 13px; color: #555;">Full Name</label>
+                <input type="text" name="name" id="name" placeholder="Enter your full name" required
+                    style="width:100%; padding: 11px; margin-top: 6px;
+                    border: 1px solid #ddd; border-radius: 6px; font-size: 15px;">
+            </div>
+
+            <div style="margin-bottom: 18px;">
+                <label style="font-size: 13px; color: #555;">Email Address</label>
+                <input type="email" name="email" placeholder="Enter your email" required
+                    style="width:100%; padding: 11px; margin-top: 6px;
+                    border: 1px solid #ddd; border-radius: 6px; font-size: 15px;">
+            </div>
+
+            <div style="margin-bottom: 18px;">
+                <label style="font-size: 13px; color: #555;">Phone Number</label>
+                <input type="text" name="phone" id="phone" placeholder="Enter your phone number" required
+                    style="width:100%; padding: 11px; margin-top: 6px;
+                    border: 1px solid #ddd; border-radius: 6px; font-size: 15px;">
+                <small id="phoneError" style="color: red; display:none;">
+                    Phone must be 10 digits only.
+                </small>
+            </div>
+
+            <div style="margin-bottom: 18px;">
+                <label style="font-size: 13px; color: #555;">Password</label>
+                <div style="position: relative;">
+                    <input type="password" name="password" id="password"
+                        placeholder="Min 8 chars, letter, number, symbol" required
+                        style="width:100%; padding: 11px; margin-top: 6px;
+                        border: 1px solid #ddd; border-radius: 6px; font-size: 15px;">
+                    <span onclick="togglePassword('password', 'eyeIcon1')" id="eyeIcon1"
+                        style="position: absolute; right: 12px; top: 55%;
+                        cursor: pointer; font-size: 18px;">👁️</span>
+                </div>
+
+                <!-- Password strength bar -->
+                <div style="margin-top: 8px;">
+                    <div style="height: 6px; background: #eee; border-radius: 4px;">
+                        <div id="strengthBar" style="height: 6px; border-radius: 4px;
+                            width: 0%; transition: all 0.3s;"></div>
+                    </div>
+                    <small id="strengthText" style="color: #999; font-size: 12px;">
+                        Type a password to see its strength
+                    </small>
+                </div>
+
+                <!-- Password rules -->
+                <div style="margin-top: 10px; font-size: 12px;">
+                    <div id="rule1" style="color: #999;">❌ At least 8 characters</div>
+                    <div id="rule2" style="color: #999;">❌ At least one uppercase letter (A-Z)</div>
+                    <div id="rule3" style="color: #999;">❌ At least one number (0-9)</div>
+                    <div id="rule4" style="color: #999;">❌ At least one special symbol (!@#$%)</div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 24px;">
+                <label style="font-size: 13px; color: #555;">Confirm Password</label>
+                <div style="position: relative;">
+                    <input type="password" name="confirm_password" id="confirm_password"
+                        placeholder="Repeat your password" required
+                        style="width:100%; padding: 11px; margin-top: 6px;
+                        border: 1px solid #ddd; border-radius: 6px; font-size: 15px;">
+                    <span onclick="togglePassword('confirm_password', 'eyeIcon2')" id="eyeIcon2"
+                        style="position: absolute; right: 12px; top: 55%;
+                        cursor: pointer; font-size: 18px;">👁️</span>
+                </div>
+                <small id="matchError" style="color: red; display:none;">
+                    Passwords do not match!
+                </small>
+                <small id="matchSuccess" style="color: green; display:none;">
+                    ✅ Passwords match!
+                </small>
+            </div>
+
+            <button type="submit" class="btn" id="submitBtn"
+                    style="width:100%; padding: 13px; font-size: 16px;">
+                Create Account
+            </button>
+        </form>
+
+        <p style="text-align: center; margin-top: 20px; font-size: 14px; color: #666;">
+            Already have an account?
+            <a href="/login" style="color: #1a73e8;">Login here</a>
+        </p>
+    </div>
+</div>
+
+<script>
+    // Show/hide password toggle
+    function togglePassword(fieldId, iconId) {
+        const field = document.getElementById(fieldId);
+        const icon = document.getElementById(iconId);
+        if (field.type === 'password') {
+            field.type = 'text';
+            icon.textContent = '🙈';
+        } else {
+            field.type = 'password';
+            icon.textContent = '👁️';
+        }
+    }
+
+    const password = document.getElementById('password');
+    const confirm = document.getElementById('confirm_password');
+    const phone = document.getElementById('phone');
+    const strengthBar = document.getElementById('strengthBar');
+    const strengthText = document.getElementById('strengthText');
+
+    // Password rules check
+    password.addEventListener('input', function() {
+        const val = this.value;
+        const rule1 = val.length >= 8;
+        const rule2 = /[A-Z]/.test(val);
+        const rule3 = /[0-9]/.test(val);
+        const rule4 = /[!@#$%^&*(),.?":{}|<>]/.test(val);
+
+        document.getElementById('rule1').innerHTML = (rule1 ? '✅' : '❌') + ' At least 8 characters';
+        document.getElementById('rule2').innerHTML = (rule2 ? '✅' : '❌') + ' At least one uppercase letter (A-Z)';
+        document.getElementById('rule3').innerHTML = (rule3 ? '✅' : '❌') + ' At least one number (0-9)';
+        document.getElementById('rule4').innerHTML = (rule4 ? '✅' : '❌') + ' At least one special symbol (!@#$%)';
+
+        document.getElementById('rule1').style.color = rule1 ? 'green' : '#999';
+        document.getElementById('rule2').style.color = rule2 ? 'green' : '#999';
+        document.getElementById('rule3').style.color = rule3 ? 'green' : '#999';
+        document.getElementById('rule4').style.color = rule4 ? 'green' : '#999';
+
+        // Strength bar
+        const score = [rule1, rule2, rule3, rule4].filter(Boolean).length;
+        const colors = ['', '#e53935', '#fb8c00', '#fdd835', '#43a047'];
+        const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+        strengthBar.style.width = (score * 25) + '%';
+        strengthBar.style.background = colors[score];
+        strengthText.textContent = score > 0 ? 'Password strength: ' + labels[score] : 'Type a password to see its strength';
+        strengthText.style.color = colors[score] || '#999';
+    });
+
+    // Confirm password check
+    confirm.addEventListener('input', function() {
+        if (this.value === password.value) {
+            document.getElementById('matchError').style.display = 'none';
+            document.getElementById('matchSuccess').style.display = 'block';
+        } else {
+            document.getElementById('matchError').style.display = 'block';
+            document.getElementById('matchSuccess').style.display = 'none';
+        }
+    });
+
+    // Phone number validation
+    phone.addEventListener('input', function() {
+        const val = this.value.replace(/\D/g, '');
+        this.value = val;
+        if (val.length !== 10) {
+            document.getElementById('phoneError').style.display = 'block';
+        } else {
+            document.getElementById('phoneError').style.display = 'none';
+        }
+    });
+
+    // Form submit validation
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        const val = password.value;
+        const rule1 = val.length >= 8;
+        const rule2 = /[A-Z]/.test(val);
+        const rule3 = /[0-9]/.test(val);
+        const rule4 = /[!@#$%^&*(),.?":{}|<>]/.test(val);
+        const phoneVal = phone.value;
+
+        if (!rule1 || !rule2 || !rule3 || !rule4) {
+            e.preventDefault();
+            alert('Please make sure your password meets all requirements!');
+        } else if (password.value !== confirm.value) {
+            e.preventDefault();
+            alert('Passwords do not match!');
+        } else if (phoneVal.length !== 10) {
+            e.preventDefault();
+            alert('Please enter a valid 10 digit phone number!');
+        }
+    });
+</script>
+{% endblock %}

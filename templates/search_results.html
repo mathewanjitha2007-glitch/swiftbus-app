@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}SwiftBus - Search Results{% endblock %}
+
+{% block content %}
+
+<div style="margin-bottom: 24px;">
+    <h2 style="color: #333;">🔍 Search Results</h2>
+    <p style="color: #666; margin-top: 6px;">
+        Showing buses from <strong>{{ from_city }}</strong>
+        to <strong>{{ to_city }}</strong>
+        on <strong>{{ travel_date }}</strong>
+    </p>
+</div>
+
+{% if buses %}
+    {% for bus in buses %}
+    <div style="background: white; padding: 24px; border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 16px;
+                border-left: 4px solid #1a73e8;">
+
+        <div style="display: flex; justify-content: space-between;
+                    align-items: center; flex-wrap: wrap; gap: 16px;">
+
+            <!-- Bus Info -->
+            <div>
+                <h3 style="color: #1a73e8; margin-bottom: 8px;">
+                    🚌 {{ bus.bus_name }}
+                </h3>
+                <p style="color: #666; font-size: 14px;">
+                    Bus Number: {{ bus.bus_number }}
+                </p>
+            </div>
+
+            <!-- Route & Time -->
+            <div style="text-align: center;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div>
+                        <div style="font-size: 20px; font-weight: bold; color: #333;">
+                            {{ bus.departure_time }}
+                        </div>
+                        <div style="color: #666; font-size: 13px;">{{ bus.from_city }}</div>
+                    </div>
+                    <div style="color: #1a73e8; font-size: 20px;">→</div>
+                    <div>
+                        <div style="font-size: 20px; font-weight: bold; color: #333;">
+                            {{ bus.arrival_time }}
+                        </div>
+                        <div style="color: #666; font-size: 13px;">{{ bus.to_city }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seats & Price -->
+            <div style="text-align: center;">
+                <div style="font-size: 13px; color: #666; margin-bottom: 4px;">
+                    Available Seats
+                </div>
+                <div style="font-size: 20px; font-weight: bold;
+                            color: {% if bus.available_seats > 10 %}#43a047{% else %}#e53935{% endif %};">
+                    {{ bus.available_seats }}
+                </div>
+            </div>
+
+            <!-- Price & Book -->
+            <div style="text-align: center;">
+                <div style="font-size: 28px; font-weight: bold; color: #1a73e8;">
+                    ₹{{ bus.price }}
+                </div>
+                <div style="font-size: 12px; color: #666; margin-bottom: 12px;">
+                    per seat
+                </div>
+                {% if bus.available_seats > 0 %}
+                <a href="/book/{{ bus.id }}" class="btn"
+                   style="padding: 10px 24px;">
+                    Book Now
+                </a>
+                {% else %}
+                <span style="background: #fce8e6; color: #c5221f;
+                             padding: 10px 24px; border-radius: 6px; font-size: 14px;">
+                    Sold Out
+                </span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+{% else %}
+<div style="background: white; padding: 60px; border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07); text-align: center;">
+    <div style="font-size: 64px; margin-bottom: 16px;">🚌</div>
+    <h3 style="color: #333; margin-bottom: 8px;">No Buses Found!</h3>
+    <p style="color: #666; margin-bottom: 24px;">
+        No buses available from {{ from_city }} to {{ to_city }} on {{ travel_date }}
+    </p>
+    <a href="/dashboard" class="btn">← Search Again</a>
+</div>
+{% endif %}
+
+{% endblock %}

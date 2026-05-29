@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}SwiftBus - Manage Buses{% endblock %}
+
+{% block content %}
+
+<div style="display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 24px;">
+    <h2 style="color: #333;">🚌 Manage Buses</h2>
+    <div>
+        <a href="/admin/buses/add" class="btn" style="margin-right: 10px;">
+            + Add New Bus
+        </a>
+        <a href="/admin" class="btn" style="background: #666;">
+            ← Admin Panel
+        </a>
+    </div>
+</div>
+
+<div style="background: white; padding: 28px; border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);">
+
+    {% if buses %}
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: #f8f9fa;">
+                <th style="padding: 12px; text-align: left; font-size: 13px; color: #555;">#</th>
+                <th style="padding: 12px; text-align: left; font-size: 13px; color: #555;">Bus Name</th>
+                <th style="padding: 12px; text-align: left; font-size: 13px; color: #555;">Number</th>
+                <th style="padding: 12px; text-align: left; font-size: 13px; color: #555;">Route</th>
+                <th style="padding: 12px; text-align: left; font-size: 13px; color: #555;">Date</th>
+                <th style="padding: 12px; text-align: left; font-size: 13px; color: #555;">Time</th>
+                <th style="padding: 12px; text-align: left; font-size: 13px; color: #555;">Seats</th>
+                <th style="padding: 12px; text-align: left; font-size: 13px; color: #555;">Price</th>
+                <th style="padding: 12px; text-align: left; font-size: 13px; color: #555;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bus in buses %}
+            <tr style="border-top: 1px solid #eee;">
+                <td style="padding: 12px; font-size: 14px;">{{ bus.id }}</td>
+                <td style="padding: 12px; font-size: 14px;">{{ bus.bus_name }}</td>
+                <td style="padding: 12px; font-size: 14px;">{{ bus.bus_number }}</td>
+                <td style="padding: 12px; font-size: 14px;">
+                    {{ bus.from_city }} → {{ bus.to_city }}
+                </td>
+                <td style="padding: 12px; font-size: 14px;">{{ bus.travel_date }}</td>
+                <td style="padding: 12px; font-size: 14px;">{{ bus.departure_time }}</td>
+                <td style="padding: 12px; font-size: 14px;">
+                    {{ bus.available_seats }}/{{ bus.total_seats }}
+                </td>
+                <td style="padding: 12px; font-size: 14px;">₹{{ bus.price }}</td>
+                <td style="padding: 12px;">
+                    <a href="/admin/buses/delete/{{ bus.id }}"
+                       class="btn btn-red"
+                       style="font-size: 12px; padding: 5px 12px;"
+                       onclick="return confirm('Are you sure?')">
+                        🗑️ Delete
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div style="text-align: center; padding: 40px; color: #999;">
+        <div style="font-size: 48px; margin-bottom: 12px;">🚌</div>
+        <p>No buses added yet! Click "Add New Bus" to get started.</p>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

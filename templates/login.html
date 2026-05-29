@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}SwiftBus - Login{% endblock %}
+
+{% block content %}
+<div style="max-width: 440px; margin: 50px auto;">
+    <div style="background: white; padding: 40px; border-radius: 12px;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.1);">
+
+        <h2 style="text-align: center; color: #1a73e8; margin-bottom: 8px;">
+            Welcome Back! 👋
+        </h2>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">
+            Login to your SwiftBus account
+        </p>
+
+        <form action="/login" method="POST">
+            <div style="margin-bottom: 18px;">
+                <label style="font-size: 13px; color: #555;">Email Address</label>
+                <input type="email" name="email" placeholder="Enter your email" required
+                    style="width:100%; padding: 11px; margin-top: 6px;
+                    border: 1px solid #ddd; border-radius: 6px; font-size: 15px;">
+            </div>
+
+            <div style="margin-bottom: 24px;">
+                <label style="font-size: 13px; color: #555;">Password</label>
+                <div style="position: relative;">
+                    <input type="password" name="password" id="password"
+                        placeholder="Enter your password" required
+                        style="width:100%; padding: 11px; margin-top: 6px;
+                        border: 1px solid #ddd; border-radius: 6px; font-size: 15px;">
+                    <span onclick="togglePassword()" id="eyeIcon"
+                        style="position: absolute; right: 12px; top: 55%;
+                        cursor: pointer; font-size: 18px;">👁️</span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn"
+                    style="width:100%; padding: 13px; font-size: 16px;">
+                Login
+            </button>
+        </form>
+
+        <p style="text-align: center; margin-top: 20px; font-size: 14px; color: #666;">
+            Don't have an account?
+            <a href="/register" style="color: #1a73e8;">Register here</a>
+        </p>
+    </div>
+</div>
+
+<script>
+    function togglePassword() {
+        const field = document.getElementById('password');
+        const icon = document.getElementById('eyeIcon');
+        if (field.type === 'password') {
+            field.type = 'text';
+            icon.textContent = '🙈';
+        } else {
+            field.type = 'password';
+            icon.textContent = '👁️';
+        }
+    }
+</script>
+{% endblock %}

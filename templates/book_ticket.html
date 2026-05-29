@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}SwiftBus - Book Ticket{% endblock %}
+
+{% block content %}
+<div style="max-width: 580px; margin: 40px auto;">
+    <div style="background: white; padding: 40px; border-radius: 12px;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.1);">
+
+        <h2 style="color: #1a73e8; margin-bottom: 24px;">🎟️ Book Your Ticket</h2>
+
+        <!-- Bus Details -->
+        <div style="background: #f0f4f8; padding: 20px; border-radius: 10px;
+                    margin-bottom: 28px;">
+            <h3 style="color: #333; margin-bottom: 12px;">
+                🚌 {{ bus.bus_name }}
+            </h3>
+            <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+                <div>
+                    <div style="font-size: 12px; color: #666;">Route</div>
+                    <div style="font-weight: bold; color: #333;">
+                        {{ bus.from_city }} → {{ bus.to_city }}
+                    </div>
+                </div>
+                <div>
+                    <div style="font-size: 12px; color: #666;">Date</div>
+                    <div style="font-weight: bold; color: #333;">{{ bus.travel_date }}</div>
+                </div>
+                <div>
+                    <div style="font-size: 12px; color: #666;">Departure</div>
+                    <div style="font-weight: bold; color: #333;">{{ bus.departure_time }}</div>
+                </div>
+                <div>
+                    <div style="font-size: 12px; color: #666;">Available Seats</div>
+                    <div style="font-weight: bold; color: #43a047;">
+                        {{ bus.available_seats }}
+                    </div>
+                </div>
+                <div>
+                    <div style="font-size: 12px; color: #666;">Price per Seat</div>
+                    <div style="font-weight: bold; color: #1a73e8;">₹{{ bus.price }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking Form -->
+        <form action="/book/{{ bus.id }}" method="POST">
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 13px; color: #555;">
+                    Number of Seats
+                </label>
+                <input type="number" name="seats" id="seats"
+                    min="1" max="{{ bus.available_seats }}"
+                    value="1" required
+                    style="width:100%; padding: 11px; margin-top: 6px;
+                    border: 1px solid #ddd; border-radius: 6px; font-size: 15px;">
+            </div>
+
+            <!-- Total Price Display -->
+            <div style="background: #e6f4ea; padding: 16px; border-radius: 8px;
+                        margin-bottom: 24px; display: flex;
+                        justify-content: space-between; align-items: center;">
+                <span style="color: #333; font-size: 15px;">Total Amount:</span>
+                <span id="totalPrice" style="font-size: 24px; font-weight: bold;
+                                             color: #1a73e8;">
+                    ₹{{ bus.price }}
+                </span>
+            </div>
+
+            <button type="submit" class="btn"
+                    style="width: 100%; padding: 14px; font-size: 16px;">
+                ✅ Confirm Booking
+            </button>
+        </form>
+
+        <a href="/dashboard"
+           style="display: block; text-align: center; margin-top: 16px;
+                  color: #666; font-size: 14px;">
+            ← Cancel and go back
+        </a>
+    </div>
+</div>
+
+<script>
+    const seats = document.getElementById('seats');
+    const totalPrice = document.getElementById('totalPrice');
+    const pricePerSeat = {{ bus.price }};
+
+    seats.addEventListener('input', function() {
+        const total = this.value * pricePerSeat;
+        totalPrice.textContent = '₹' + total.toFixed(2);
+    });
+</script>
+{% endblock %}
